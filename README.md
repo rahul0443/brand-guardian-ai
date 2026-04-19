@@ -8,7 +8,43 @@ Built with **GPT-4o**, **LangGraph**, **RAG (Retrieval-Augmented Generation)**, 
 
 ## Architecture
 
-![Architecture](docs/architecture.png)
+```mermaid
+flowchart TD
+    A[YouTube URL] --> B[Ingest]
+    B --> C[Retrieve]
+    C --> D[Audit]
+    D --> E[Report]
+
+    B -.- B1[yt-dlp]
+    B -.- B2[Azure Video Indexer]
+    B -.- B3[Azure Blob Storage]
+
+    C -.- C1[Azure AI Search]
+    C -.- C2[OpenAI Embeddings]
+    C -.- C3[FTC + YouTube Policies]
+
+    D -.- D1[GPT-4o]
+    D -.- D2[LangChain]
+    D -.- D3[LangGraph]
+
+    E -.- E1[FastAPI]
+    E -.- E2[Pydantic]
+
+    style A fill:#f9cb42,stroke:#ba7517,color:#412402
+    style B fill:#85B7EB,stroke:#185FA5,color:#042C53
+    style C fill:#5DCAA5,stroke:#0F6E56,color:#04342C
+    style D fill:#AFA9EC,stroke:#534AB7,color:#26215C
+    style E fill:#F0997B,stroke:#993C1D,color:#4A1B0C
+```
+
+The system operates as a 4-stage pipeline:
+
+| Stage | What Happens | Technology |
+|-------|-------------|------------|
+| **Ingest** | Downloads video, extracts transcript (speech-to-text) and on-screen text (OCR) | yt-dlp, Azure Video Indexer |
+| **Retrieve** | Searches vector database for the most relevant advertising rules | Azure AI Search, OpenAI Embeddings |
+| **Audit** | AI reads transcript + rules and generates a structured compliance judgment | GPT-4o, LangChain, LangGraph |
+| **Report** | Outputs PASS/FAIL status with categorized violations and severity levels | FastAPI, Pydantic |
 
 The system operates as a 4-stage pipeline:
 
