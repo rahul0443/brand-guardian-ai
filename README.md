@@ -46,15 +46,6 @@ The system operates as a 4-stage pipeline:
 | **Audit** | AI reads transcript + rules and generates a structured compliance judgment | GPT-4o, LangChain, LangGraph |
 | **Report** | Outputs PASS/FAIL status with categorized violations and severity levels | FastAPI, Pydantic |
 
-The system operates as a 4-stage pipeline:
-
-| Stage | What Happens | Technology |
-|-------|-------------|------------|
-| **Ingest** | Downloads video, extracts transcript (speech-to-text) and on-screen text (OCR) | yt-dlp, Azure Video Indexer |
-| **Retrieve** | Searches vector database for the most relevant advertising rules | Azure AI Search, OpenAI Embeddings |
-| **Audit** | AI reads transcript + rules and generates a structured compliance judgment | GPT-4o, LangChain |
-| **Report** | Outputs PASS/FAIL status with categorized violations and severity levels | LangGraph State |
-
 ---
 
 ## Sample Output
@@ -65,7 +56,7 @@ Video ID:    vid_ce6c43bb
 Status:      FAIL
 
 [ VIOLATIONS DETECTED ]
-- [CRITICAL] Claim Validation: Absolute guarantee detected — "guaranteed results"
+- [CRITICAL] Claim Validation: Absolute guarantee detected -- "guaranteed results"
 - [WARNING] FTC Disclosure: No sponsorship disclosure found
 
 [ FINAL SUMMARY ]
@@ -127,7 +118,7 @@ The retrieved rules are injected into a structured prompt alongside the video co
 ### 4. Workflow Orchestration
 LangGraph manages the pipeline as a directed graph:
 ```
-[START] → [Indexer Node] → [Auditor Node] → [END]
+[START] --> [Indexer Node] --> [Auditor Node] --> [END]
 ```
 Each node reads from and writes to a shared `VideoAuditState`, enabling clean separation of concerns and easy extensibility.
 
